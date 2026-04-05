@@ -5,7 +5,7 @@ const multer = require('multer');
 const fs = require('fs');
 
 const app = express();
-const PORT = process.env.PORT || 300021:00 2026/4/5;
+const PORT = process.env.PORT || 3000;
 
 // 中间件
 app.use(express.json({ limit: '10mb' }));
