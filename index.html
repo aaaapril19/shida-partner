@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>师大同好集 · 找搭子共赴热爱 | 华东师大</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #fff8f6; font-family: system-ui, 'PingFang SC', 'Microsoft YaHei', sans-serif; padding-bottom: 70px; }
+        .app-container { max-width: 1300px; margin: 0 auto; padding: 1rem 1.2rem; }
+        .nav-header { background: #ffffffdd; backdrop-filter: blur(12px); border-radius: 3rem; padding: 0.5rem 1.2rem; display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
+        .logo-icon { background: #b13e3e; width: 36px; height: 36px; border-radius: 30px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; }
+        .logo-text { font-weight: 800; font-size: 1.3rem; background: linear-gradient(135deg, #b13e3e, #7a2e2e); background-clip: text; -webkit-background-clip: text; color: transparent; }
+        .bottom-tab { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,250,245,0.96); backdrop-filter: blur(16px); display: flex; justify-content: space-around; padding: 8px 12px 12px; border-top: 1px solid #f0cfc4; z-index: 200; }
+        .tab-item { display: flex; flex-direction: column; align-items: center; background: none; border: none; font-size: 0.7rem; color: #b87a6a; cursor: pointer; padding: 4px 12px; border-radius: 30px; }
+        .tab-item.active-tab { color: #b13e3e; background: #fff0ea; font-weight: 600; }
+        .tab-icon { font-size: 1.3rem; }
+        .msg-badge { position: absolute; top: -2px; right: 0; background: #e15554; color: white; border-radius: 20px; padding: 0px 6px; font-size: 0.6rem; font-weight: bold; }
+        .page { display: none; animation: fadeScale 0.2s ease; }
+        .page.active-page { display: block; }
+        @keyframes fadeScale { from { opacity: 0; transform: translateY(6px);} to { opacity: 1; transform: translateY(0);} }
+        .card { background: rgba(255,250,245,0.98); border-radius: 1.8rem; box-shadow: 0 12px 24px -12px rgba(110,40,40,0.1); padding: 1.2rem; margin-bottom: 1.2rem; border: 1px solid rgba(200,120,120,0.15); }
+        .card-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; border-left: 4px solid #b13e3e; padding-left: 0.8rem; color: #752e2e; }
+        .form-group { margin-bottom: 1rem; }
+        label { font-weight: 600; color: #a23b3b; display: block; margin-bottom: 0.3rem; font-size: 0.85rem; }
+        input, select, textarea { width: 100%; padding: 0.6rem 1rem; border: 1.5px solid #f0d9d4; border-radius: 1.5rem; background: white; }
+        .btn-primary { background: linear-gradient(100deg, #b13e3e, #8f3030); border: none; padding: 0.7rem; border-radius: 2rem; font-weight: 700; color: white; width: 100%; cursor: pointer; }
+        .btn-outline { background: transparent; border: 1.5px solid #b13e3e; padding: 0.4rem 1rem; border-radius: 2rem; color: #b13e3e; font-weight: 600; cursor: pointer; }
+        .partner-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1rem; }
+        .partner-card { background: white; border-radius: 1.5rem; padding: 0.9rem; border: 1px solid #fae1d8; }
+        .scene-img { width: 100%; height: 150px; object-fit: cover; border-radius: 1rem; margin-bottom: 0.6rem; background: #f5e6e0; }
+        .badge-hobby { background: #fce9e3; color: #a73c2c; padding: 2px 10px; border-radius: 30px; font-size: 0.75rem; display: inline-block; }
+        .like-icon, .comment-icon { color: #d9a99b; cursor: pointer; font-size: 0.75rem; margin-right: 8px; }
+        .like-icon.liked { color: #e15554; }
+        .toast-msg { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%); background: #b13e3e; color: white; padding: 6px 16px; border-radius: 40px; font-size: 0.8rem; z-index: 1100; }
+        .profile-header { display: flex; align-items: center; gap: 1rem; background: #fff0ea; border-radius: 1.5rem; padding: 1rem; margin-bottom: 1rem; }
+        .profile-avatar { font-size: 3rem; background: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .avatar-option { width: 40px; height: 40px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; border: 2px solid transparent; }
+        .avatar-option.selected { border-color: #b13e3e; }
+        .msg-item { background: #fef7f2; border-radius: 1rem; padding: 0.8rem; margin-bottom: 0.6rem; border-left: 3px solid #b13e3e; }
+        .auth-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 999; }
+        .auth-card { background: white; border-radius: 2rem; padding: 2rem; width: 90%; max-width: 400px; }
+        .image-preview-area { margin-top: 8px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .preview-img { width: 80px; height: 80px; object-fit: cover; border-radius: 12px; }
+        .img-upload-label { background: #fff0ea; padding: 6px 12px; border-radius: 30px; font-size: 0.7rem; color: #b13e3e; cursor: pointer; display: inline-block; }
+        .disclaimer { margin-top: 2rem; padding: 1rem; background: #fff5f2; border-radius: 1rem; font-size: 0.75rem; color: #884433; }
+    </style>
+</head>
+<body>
+<div class="app-container">
+    <div class="nav-header"><div class="logo-area"><div class="logo-icon">❤️</div><div class="logo-text">师大同好集</div></div><div class="subhead" style="font-size:0.7rem">丽娃河畔·找搭子</div></div>
+    
+    <div id="homePage" class="page active-page"><div class="card"><div class="card-title">🏠 广场·最新搭子</div><div id="homeGrid" class="partner-grid">加载中...</div></div><div class="disclaimer">⚠️ 校园社交请保护隐私，本平台仅做校内交流</div></div>
+    <div id="publishPage" class="page"><div class="card"><div class="card-title">📝 发布搭子（可带图）</div><form id="publishForm"><div class="form-group"><label>爱好 *</label><input id="pubHobby" required></div><div class="form-group"><label>空闲时间 *</label><input id="pubFreeTime" required></div><div class="form-group"><label>联系方式 *</label><input id="pubContact" required></div><div class="form-group"><label>校区</label><select id="pubCampus"><option>不限</option><option>中北校区</option><option>闵行校区</option></select></div><div class="form-group"><label>人数上限</label><input id="pubMax" type="number" value="4"></div><div class="form-group"><label>上传照片</label><input type="file" id="pubImage" accept="image/*" style="display:none"><label for="pubImage" class="img-upload-label">📷 选择图片</label><div id="imagePreviewArea" class="image-preview-area"></div></div><div class="form-group"><label>备注</label><textarea id="pubNote" rows="2"></textarea></div><button type="submit" class="btn-primary">发布</button></form></div></div>
+    <div id="discoverPage" class="page"><div class="card"><div class="card-title">🔍 发现搭子</div><div class="filter-bar"><input id="discoverSearch" placeholder="搜索爱好" style="flex:1"><select id="discoverCampus"><option value="all">全部校区</option><option>中北校区</option><option>闵行校区</option></select><button id="resetDiscover" class="btn-outline">重置</button></div><div id="discoverGrid" class="partner-grid">加载中...</div></div></div>
+    <div id="profilePage" class="page"><div class="card"><div class="card-title">👤 我的</div><div id="profileInfo">加载中...</div><button id="clearAllBtn" class="btn-outline" style="width:100%; margin-top:1rem">清空我的发布</button></div></div>
+    <div id="activityPage" class="page"><div class="card"><div class="card-title">🎉 校园活动</div><div id="activityGrid" class="partner-grid">加载中...</div></div></div>
+    <div id="notifyPage" class="page"><div class="card"><div class="card-title">🔔 消息通知</div><div id="notifyList">加载中...</div></div></div>
+</div>
+
+<div class="bottom-tab">
+    <button class="tab-item active-tab" data-page="home"><span class="tab-icon">🏠</span><span>首页</span></button>
+    <button class="tab-item" data-page="discover"><span class="tab-icon">🔍</span><span>发现</span></button>
+    <button class="tab-item" data-page="publish"><span class="tab-icon">📝</span><span>发布</span></button>
+    <button class="tab-item" data-page="activity"><span class="tab-icon">🎉</span><span>活动</span></button>
+    <button class="tab-item" data-page="notify"><span class="tab-icon">🔔</span><span>消息</span><span id="msgBadge" class="msg-badge" style="display:none">0</span></button>
+    <button class="tab-item" data-page="profile"><span class="tab-icon">👤</span><span>我的</span></button>
+</div>
+
+<div id="authModal" class="auth-modal" style="display:none"><div class="auth-card"><div style="display:flex; gap:0; margin-bottom:1rem"><button class="btn-outline" id="showLoginBtn" style="flex:1; border-radius:1rem 0 0 1rem">登录</button><button class="btn-outline" id="showRegisterBtn" style="flex:1; border-radius:0 1rem 1rem 0">注册</button></div><form id="loginForm"><div class="form-group"><label>用户名</label><input id="loginUsername" required></div><div class="form-group"><label>密码</label><input type="password" id="loginPassword" required></div><button type="submit" class="btn-primary">登录</button></form><form id="registerForm" style="display:none"><div class="form-group"><label>用户名</label><input id="regUsername" required></div><div class="form-group"><label>密码</label><input type="password" id="regPassword" required minlength="6"></div><div class="form-group"><label>确认密码</label><input type="password" id="regPasswordConfirm" required></div><button type="submit" class="btn-primary">注册</button></form></div></div>
+
+<script>
+    const API_BASE = 'http://localhost:3000/api';
+    let currentUser = null;
+    let partners = [];
+    let activities = [];
+
+    // 辅助函数
+    function showMessage(msg, isErr = false) { let d=document.createElement('div'); d.className='toast-msg'; d.innerText=msg; if(isErr) d.style.backgroundColor='#bc5a40'; document.body.appendChild(d); setTimeout(()=>d.remove(),2000); }
+    
+    async function apiCall(url, options = {}) { try { const res = await fetch(API_BASE + url, { headers: { 'Content-Type': 'application/json' }, ...options }); if(!res.ok) throw new Error(await res.text()); return await res.json(); } catch(e) { showMessage(e.message, true); throw e; } }
+
+    async function loadPartners() { partners = await apiCall('/partners'); renderAll(); }
+    async function loadActivities() { activities = await apiCall('/activities'); renderActivities(); }
+
+    async function login(username, password) { const data = await apiCall('/login', { method: 'POST', body: JSON.stringify({ username, password }) }); if(data.success) { currentUser = data.user; localStorage.setItem('currentUser', JSON.stringify(currentUser)); closeAuthModal(); showMessage(`欢迎 ${currentUser.name}`); loadPartners(); loadActivities(); renderProfile(); renderNotify(); updateMsgBadge(); } }
+    async function register(username, password) { await apiCall('/register', { method: 'POST', body: JSON.stringify({ username, password, name: username }) }); showMessage('注册成功，请登录'); document.getElementById('showLoginBtn').click(); }
+
+    async function updateUser(updates) { const userData = { ...currentUser, ...updates }; await apiCall('/updateUser', { method: 'POST', body: JSON.stringify(userData) }); currentUser = userData; localStorage.setItem('currentUser', JSON.stringify(currentUser)); renderProfile(); }
+    async function addPartner(partnerData) { await apiCall('/partners', { method: 'POST', body: JSON.stringify(partnerData) }); await loadPartners(); showMessage('发布成功'); switchPage('home'); }
+    async function deletePartner(id) { await apiCall(`/partners/${id}`, { method: 'DELETE' }); await loadPartners(); }
+    async function toggleLike(id, currentlyLiked) { await apiCall(`/partners/${id}/like`, { method: 'POST', body: JSON.stringify({ increment: !currentlyLiked }) }); await loadPartners(); if(!currentlyLiked && currentUser && partners.find(p=>p.id===id)) showMessage('点赞成功'); }
+    async function addComment(id, text) { await apiCall(`/partners/${id}/comment`, { method: 'POST', body: JSON.stringify({ text, userName: currentUser.name, time: new Date().toLocaleString() }) }); await loadPartners(); showMessage('评论已发布'); }
+    async function joinPartner(id) { try { await apiCall(`/partners/${id}/join`, { method: 'POST' }); await loadPartners(); showMessage('申请已发送'); } catch(e) { showMessage('人数已满', true); } }
+    async function joinActivity(id) { try { await apiCall(`/activities/${id}/join`, { method: 'POST' }); await loadActivities(); showMessage('报名成功'); } catch(e) { showMessage('已满员', true); } }
+
+    function renderCard(p) {
+        let isLiked = currentUser?.myFavs?.includes(p.id) || false;
+        let isMyPost = currentUser?.username === p.createdByUser;
+        return `<div class="partner-card" data-id="${p.id}">
+            <img class="scene-img" src="${p.img || 'https://images.pexels.com/photos/256490/pexels-photo-256490.jpeg'}" onerror="this.src='https://images.pexels.com/photos/256490/pexels-photo-256490.jpeg'">
+            <div style="display:flex; justify-content:space-between"><span class="badge-hobby">${p.hobby}</span>${!isMyPost ? `<span class="delete-icon join-req" style="cursor:pointer;color:#b13e3e">✋ 申请</span>` : `<span class="delete-icon del-btn" style="cursor:pointer">🗑️</span>`}</div>
+            <div>⏰ ${p.freeTime} ${p.campus ? `📍 ${p.campus}` : ''}</div>
+            <div>📞 ${p.contact}</div>
+            ${p.note ? `<div>✏️ ${p.note}</div>` : ''}
+            <div style="display:flex; gap:12px; margin-top:8px">
+                <span class="like-icon ${isLiked ? 'liked' : ''}" style="cursor:pointer">❤️ ${p.likes || 0}</span>
+                <span class="comment-icon" style="cursor:pointer">💬 ${p.comments?.length || 0}</span>
+                <span>👥 ${p.currentMembers}/${p.maxMembers}</span>
+            </div>
+            ${p.comments?.length ? `<div style="font-size:0.7rem;color:#888">💬 ${p.comments[0].text}</div>` : ''}
+        </div>`;
+    }
+
+    function attachEvents() {
+        document.querySelectorAll('.del-btn').forEach(btn => btn.addEventListener('click', async (e) => { e.stopPropagation(); let id = parseInt(btn.closest('.partner-card')?.dataset.id); if(confirm('删除？')) await deletePartner(id); }));
+        document.querySelectorAll('.join-req').forEach(btn => btn.addEventListener('click', async (e) => { e.stopPropagation(); if(!currentUser) { openAuthModal(); return; } let id = parseInt(btn.closest('.partner-card')?.dataset.id); await joinPartner(id); }));
+        document.querySelectorAll('.like-icon').forEach(btn => btn.addEventListener('click', async (e) => { e.stopPropagation(); if(!currentUser) { openAuthModal(); return; } let id = parseInt(btn.closest('.partner-card')?.dataset.id); let p = partners.find(p=>p.id===id); if(p) await toggleLike(id, currentUser.myFavs?.includes(id)); }));
+        document.querySelectorAll('.comment-icon').forEach(btn => btn.addEventListener('click', async (e) => { e.stopPropagation(); if(!currentUser) { openAuthModal(); return; } let id = parseInt(btn.closest('.partner-card')?.dataset.id); let cmt = prompt('写下你的评论'); if(cmt) await addComment(id, cmt); }));
+    }
+
+    function renderHome() { document.getElementById('homeGrid').innerHTML = partners.slice(0,6).map(renderCard).join(''); attachEvents(); }
+    function renderDiscover() { let search = document.getElementById('discoverSearch')?.value.toLowerCase() || ''; let campus = document.getElementById('discoverCampus')?.value; let filtered = partners.filter(p => p.hobby.toLowerCase().includes(search) && (campus==='all' || p.campus===campus)); document.getElementById('discoverGrid').innerHTML = filtered.map(renderCard).join(''); attachEvents(); }
+    function renderActivities() { document.getElementById('activityGrid').innerHTML = activities.map(act => `<div class="partner-card"><div><strong>${act.title}</strong></div><div>🕒 ${act.time}</div><div>📍 ${act.location}</div><div>👥 ${act.current}/${act.max}</div><button class="btn-outline act-join" data-id="${act.id}">报名</button></div>`).join(''); document.querySelectorAll('.act-join').forEach(btn => btn.addEventListener('click', async () => { if(!currentUser) { openAuthModal(); return; } await joinActivity(parseInt(btn.dataset.id)); })); }
+    function renderProfile() { if(!currentUser) { document.getElementById('profileInfo').innerHTML = `<div style="text-align:center"><p>请先登录</p><button class="btn-primary" onclick="openAuthModal()">登录</button></div>`; return; } let myPosts = partners.filter(p=>p.createdByUser===currentUser.username); let html = `<div class="profile-header"><div class="profile-avatar">${currentUser.avatar}</div><div><strong>${currentUser.name}</strong><button class="btn-outline btn-sm" id="editNameBtn" style="margin-left:8px">修改昵称</button><div>${currentUser.bio}</div></div></div><div><strong>兴趣标签</strong><div>${(currentUser.interestTags||[]).map(t=>`<span style="background:#ffe4db;padding:2px 8px;border-radius:20px;margin:2px">#${t}</span>`).join('')}<button id="addTagBtn" class="btn-outline btn-sm">+</button></div></div><div><strong>我的发布(${myPosts.length})</strong></div><div class="partner-grid">${myPosts.map(renderCard).join('')}</div>`; document.getElementById('profileInfo').innerHTML = html; document.getElementById('editNameBtn')?.addEventListener('click', async () => { let newName = prompt('新昵称', currentUser.name); if(newName) await updateUser({ name: newName }); }); document.getElementById('addTagBtn')?.addEventListener('click', async () => { let tag = prompt('添加标签'); if(tag && !currentUser.interestTags.includes(tag)) await updateUser({ interestTags: [...currentUser.interestTags, tag] }); }); attachEvents(); }
+    function renderNotify() { let list = currentUser?.notifications || []; document.getElementById('notifyList').innerHTML = list.length ? list.map(n=>`<div class="msg-item">${n.msg}<div style="font-size:0.7rem">${n.time}</div></div>`).join('') : '<div>暂无消息</div>'; }
+    function updateMsgBadge() { let badge = document.getElementById('msgBadge'); if(currentUser && currentUser.notifications?.length) { badge.style.display = 'inline-block'; badge.innerText = currentUser.notifications.length > 9 ? '9+' : currentUser.notifications.length; } else badge.style.display = 'none'; }
+    function renderAll() { renderHome(); renderDiscover(); renderProfile(); renderNotify(); updateMsgBadge(); }
+
+    function switchPage(pageId) { document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page')); document.getElementById(`${pageId}Page`).classList.add('active-page'); document.querySelectorAll('.tab-item').forEach(btn=>{ if(btn.dataset.page===pageId) btn.classList.add('active-tab'); else btn.classList.remove('active-tab'); }); if(pageId==='profile') renderProfile(); if(pageId==='notify') renderNotify(); }
+    function openAuthModal() { document.getElementById('authModal').style.display = 'flex'; }
+    function closeAuthModal() { document.getElementById('authModal').style.display = 'none'; }
+
+    document.getElementById('showLoginBtn').addEventListener('click',()=>{ document.getElementById('loginForm').style.display='block'; document.getElementById('registerForm').style.display='none'; });
+    document.getElementById('showRegisterBtn').addEventListener('click',()=>{ document.getElementById('loginForm').style.display='none'; document.getElementById('registerForm').style.display='block'; });
+    document.getElementById('loginForm').addEventListener('submit', async (e)=>{ e.preventDefault(); await login(document.getElementById('loginUsername').value, document.getElementById('loginPassword').value); });
+    document.getElementById('registerForm').addEventListener('submit', async (e)=>{ e.preventDefault(); let pwd=document.getElementById('regPassword').value; let confirm=document.getElementById('regPasswordConfirm').value; if(pwd!==confirm) { showMessage('密码不一致',true); return; } await register(document.getElementById('regUsername').value, pwd); });
+    document.getElementById('publishForm').addEventListener('submit', async (e)=>{ e.preventDefault(); if(!currentUser) { openAuthModal(); return; } let file = document.getElementById('pubImage').files[0]; let imgBase64 = ''; if(file) { let reader = new FileReader(); imgBase64 = await new Promise(resolve=>{ reader.onload=()=>resolve(reader.result); reader.readAsDataURL(file); }); } await addPartner({ hobby: document.getElementById('pubHobby').value, freeTime: document.getElementById('pubFreeTime').value, contact: document.getElementById('pubContact').value, campus: document.getElementById('pubCampus').value, maxMembers: parseInt(document.getElementById('pubMax').value), note: document.getElementById('pubNote').value, img: imgBase64, type: 'other', createdBy: currentUser.name, createdByUser: currentUser.username }); e.target.reset(); document.getElementById('imagePreviewArea').innerHTML=''; });
+    document.getElementById('resetDiscover').addEventListener('click',()=>{ document.getElementById('discoverSearch').value=''; document.getElementById('discoverCampus').value='all'; renderDiscover(); });
+    document.getElementById('discoverSearch').addEventListener('input',renderDiscover);
+    document.getElementById('discoverCampus').addEventListener('change',renderDiscover);
+    document.getElementById('clearAllBtn')?.addEventListener('click',async()=>{ if(confirm('清空你所有发布？')){ for(let p of partners.filter(p=>p.createdByUser===currentUser?.username)) await deletePartner(p.id); await loadPartners(); } });
+    document.querySelectorAll('.tab-item').forEach(btn=>btn.addEventListener('click',()=>switchPage(btn.dataset.page)));
+
+    // 图片预览
+    document.getElementById('pubImage').addEventListener('change', (e)=>{ let file=e.target.files[0]; if(file){ let reader=new FileReader(); reader.onload=ev=>{ document.getElementById('imagePreviewArea').innerHTML=`<img src="${ev.target.result}" class="preview-img">`; }; reader.readAsDataURL(file); } });
+
+    // 自动登录
+    let savedUser = localStorage.getItem('currentUser');
+    if(savedUser) { currentUser = JSON.parse(savedUser); loadPartners(); loadActivities(); renderProfile(); renderNotify(); updateMsgBadge(); } else { openAuthModal(); loadPartners(); loadActivities(); }
+</script>
+</body>
+</html>
