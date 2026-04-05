@@ -5,7 +5,7 @@ const multer = require('multer');
 const fs = require('fs');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 300021:00 2026/4/5;
 
 // 中间件
 app.use(express.json({ limit: '10mb' }));
@@ -245,7 +245,10 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
     if (!req.file) return res.status(400).json({ error: '没有文件' });
     res.json({ imageUrl: '/uploads/' + req.file.filename });
 });
-
+// 在文件末尾，app.listen 之前加上这行
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 app.listen(PORT, () => {
     console.log(`✅ 服务器运行在 http://localhost:${PORT}`);
     console.log(`📁 数据存储在 database.sqlite`);
